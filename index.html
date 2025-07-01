@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Quitação de Dívidas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary-color: #22c55e; /* Green */
+            --secondary-color: #3b82f6; /* Blue */
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.125rem;
+            color: var(--gray-500);
+        }
+
+        .card {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -2px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper span {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            font-size: 1.125rem;
+            border: 2px solid var(--gray-300);
+            border-radius: 0.75rem;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+        }
+        
+        /* Slider */
+        .slider-control .label-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        #percentageValue {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--primary-color);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            outline: none;
+            background: linear-gradient(90deg, var(--primary-color) 10%, var(--gray-300) 10%);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 3px solid var(--white);
+            background-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 3px solid var(--white);
+            background-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        /* Resultados */
+        .results-card {
+            text-align: center;
+            background: linear-gradient(135deg, var(--gray-800), var(--gray-900));
+            color: var(--white);
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .result-item h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--gray-300);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .result-item .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .result-item .value.time {
+             font-size: 1.75rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+        
+        @media (min-width: 640px) {
+             .results-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Calculadora de Dívidas</h1>
+            <p>Veja quanto tempo levará para quitar suas dívidas.</p>
+        </header>
+
+        <main>
+            <section class="card">
+                <div class="input-group">
+                    <label for="incomeInput">Sua Renda Mensal</label>
+                    <div class="input-wrapper">
+                        <span>R$</span>
+                        <input type="text" id="incomeInput" class="input-field" placeholder="3000.00" inputmode="decimal">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="debtInput">Valor Total da Dívida</label>
+                    <div class="input-wrapper">
+                        <span>R$</span>
+                        <input type="text" id="debtInput" class="input-field" placeholder="15000.00" inputmode="decimal">
+                    </div>
+                </div>
+            </section>
+            
+            <section class="card">
+                 <div class="input-group slider-control">
+                    <div class="label-wrapper">
+                        <label for="percentageSlider">Porcentagem da renda para a dívida</label>
+                        <span id="percentageValue">10%</span>
+                    </div>
+                    <input type="range" id="percentageSlider" min="1" max="100" value="10" step="1">
+                </div>
+            </section>
+
+            <section class="card results-card">
+                <div class="results-grid">
+                    <div class="result-item">
+                        <h3><i data-lucide="wallet"></i>Parcela Mensal</h3>
+                        <p class="value" id="monthlyPaymentResult">R$ 0,00</p>
+                    </div>
+                    <div class="result-item">
+                        <h3><i data-lucide="calendar-clock"></i>Tempo para Quitar</h3>
+                        <p class="value time" id="timeResult">—</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Cálculos baseados em valores fixos, sem juros.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Elementos do DOM ---
+            const incomeInput = document.getElementById('incomeInput');
+            const debtInput = document.getElementById('debtInput');
+            const percentageSlider = document.getElementById('percentageSlider');
+            const percentageValue = document.getElementById('percentageValue');
+            const monthlyPaymentResult = document.getElementById('monthlyPaymentResult');
+            const timeResult = document.getElementById('timeResult');
+
+            // --- Funções Auxiliares ---
+            const formatCurrency = (value) => {
+                if (isNaN(value)) value = 0;
+                return new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                }).format(value);
+            };
+
+            const parseInput = (value) => {
+                return parseFloat(value.replace(/[^0-9,.]/g, '').replace(',', '.')) || 0;
+            };
+
+            const formatTime = (totalMonths) => {
+                if (!isFinite(totalMonths) || totalMonths <= 0) {
+                    return "—";
+                }
+                
+                const years = Math.floor(totalMonths / 12);
+                const months = Math.ceil(totalMonths % 12);
+
+                let result = "";
+                if (years > 0) {
+                    result += `${years} ano${years > 1 ? 's' : ''}`;
+                }
+                if (months > 0) {
+                    if (years > 0) result += " e ";
+                    result += `${months} ${months > 1 ? 'meses' : 'mês'}`;
+                }
+                
+                return result || "Quitado!";
+            };
+
+            // --- Função Principal de Cálculo ---
+            const calculate = () => {
+                const income = parseInput(incomeInput.value);
+                const debt = parseInput(debtInput.value);
+                const percentage = parseInt(percentageSlider.value, 10);
+
+                // Atualiza a UI do slider
+                percentageValue.textContent = `${percentage}%`;
+                percentageSlider.style.background = `linear-gradient(90deg, var(--primary-color) ${percentage}%, var(--gray-300) ${percentage}%)`;
+
+                // Calcula a parcela
+                const monthlyPayment = income * (percentage / 100);
+                monthlyPaymentResult.textContent = formatCurrency(monthlyPayment);
+
+                // Calcula o tempo
+                let timeText = "—";
+                if (debt === 0) {
+                    timeText = "Dívida quitada!";
+                } else if (monthlyPayment > 0) {
+                    const totalMonths = debt / monthlyPayment;
+                    timeText = formatTime(totalMonths);
+                } else {
+                    timeText = "Defina uma parcela";
+                }
+                timeResult.textContent = timeText;
+            };
+
+            // --- Event Listeners ---
+            incomeInput.addEventListener('input', calculate);
+            debtInput.addEventListener('input', calculate);
+            percentageSlider.addEventListener('input', calculate);
+
+            // --- Inicialização ---
+            lucide.createIcons();
+            calculate(); // Executa o cálculo inicial
+        });
+    </script>
+</body>
+</html>
